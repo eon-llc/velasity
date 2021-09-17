@@ -2,19 +2,27 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Velasity</title>
-    <meta name="description" content="">
+    <meta name="description" content="Block explorer and statistics for the Velas VLX blockchain.">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     {{content-for "head"}}
 
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link integrity="" rel="stylesheet" href="{{rootURL}}assets/vendor.css">
     <link integrity="" rel="stylesheet" href="{{rootURL}}assets/velasity.css">
+
+    <script async defer data-domain="velasity.com" src="https://plausible.io/js/plausible.js"></script>
 
     {{content-for "head-footer"}}
   </head>
   <body>
+
+    <div id="loading" class="loader-wrap"><div class="loader"></div></div>
+
     {{content-for "body"}}
 
     <script src="{{rootURL}}assets/vendor.js"></script>

@@ -18,8 +18,11 @@ module.exports = function (environment) {
     },
 
     APP: {
-      // Here you can pass flags/options to your application instance
-      // when it is created
+      api: {
+        stats: 'https://wlal2jacbk.execute-api.us-east-1.amazonaws.com/v1/velasity/stats',
+        search: 'https://wlal2jacbk.execute-api.us-east-1.amazonaws.com/v1/velasity/search',
+      },
+      vote_key: 'eon93Yhg7bjKgdwnt79TRfeLbePqddLEFP9H1iQBufN',
     },
   };
 

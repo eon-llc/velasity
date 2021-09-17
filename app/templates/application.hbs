@@ -1,7 +1,38 @@
-{{page-title "Velasity"}}
+<EmberNotify @closeAfter={{4000}} />
+<PageProgress @background={{"#27c4f5 linear-gradient(to right, #27c4f5, #a307ba, #fd8d32, #70c050, #27c4f5)"}} />
+<header>
+	<div class="container">
+		<div class="box">
+			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 62.5 42"><path fill="#eee" d="M62.5 21L34.8 5.2v8.9h-4.6V2.6L25.5 0v14.1H0l2.6 4.6h36.8v-5.6L53.3 21l-13.9 7.9v-5.6H15l2.6 4.6h7.9V42l4.7-2.6V27.9h4.6v8.9z"/></svg>
 
-{{!-- The following component displays Ember's default welcome message. --}}
-<WelcomePage />
-{{!-- Feel free to remove this! --}}
+			<ul>
+				<li><LinkTo @route="index">Statistics</LinkTo></li>
+				<li><LinkTo @route="validators">Validators</LinkTo></li>
+			</ul>
 
-{{outlet}}
+			<ThemeSwitcher @theme={{this.theme}} @toggle={{action "toggleTheme"}} />
+		</div>
+	</div>
+</header>
+
+<main>
+	<Search/>
+	{{outlet}}
+</main>
+
+<footer>
+	<div class="container">
+		<div class="box">
+			<div class="row">
+				<div class="col-12 text-center">
+					<button {{action "copy" this.vote_key}}><BsTooltip @title="Copy our vote key"/>{{this.vote_key}}</button>
+					<p>
+						&copy; Crafted by <em>Eon</em> Validator for the Velas community. <a href="https://twitter.com/eon_llc" rel="noopener noreferrer" target="_blank"><MdIcon @icon="twitter"/></a><br/>
+						<small>Delegate your stake to <em>eon</em> to support development of more products like this one.</small>
+					</p>
+					<ThemeSwitcher @theme={{this.theme}} @toggle={{action "toggleTheme"}} />
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
