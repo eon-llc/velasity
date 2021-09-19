@@ -78,14 +78,12 @@ export default class ValidatorsController extends Controller {
 
   get stakers() {
     if (this.model.stakers) {
-      console.log(this.model.stakers);
       let stakers = [];
       const filtered_stakers = this.model.stakers.filter((e) => e.active_stake);
       const total_stake = filtered_stakers.map((e) => parseInt(e.active_stake)).reduce((acc, curr) => acc + curr);
 
       for (var j = 0; j < filtered_stakers.length; j++) {
         const staker = filtered_stakers[j];
-        console.log(staker.active_stake);
         staker.share = ((parseInt(staker.active_stake) / parseInt(total_stake)) * 100).toFixed(1);
         stakers.push(staker);
       }

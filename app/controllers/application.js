@@ -30,7 +30,6 @@ export default class ApplicationController extends Controller {
 
   @action
   toggleTheme() {
-    console.log('toggling');
     if (this.theme === 'dark') {
       localStorage.setItem('theme', 'light');
       this.theme = 'light';

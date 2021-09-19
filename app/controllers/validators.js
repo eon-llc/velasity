@@ -23,11 +23,14 @@ export default class ValidatorsController extends Controller {
     if (this.model.validators) {
       const count = this.model.validators.length;
       const validator_scores = this.validator_scores();
-      console.log(validator_scores);
+
       let validators = this.model.validators;
       let halt_warning_set = false;
       let count_halt;
       let versions = [];
+      let top_two_versions = [];
+      let other_versions = [];
+      let other_versions_parent = {};
 
       for (var i = validators.length - 1; i >= 0; i--) {
         validators[i].activated_stake = Math.round(validators[i].activated_stake / 1000000000);
@@ -55,6 +58,10 @@ export default class ValidatorsController extends Controller {
         validators[j].halt_warning = false;
         validators[j].style = halt_warning_set ? this.safe_delay(j + 2) : this.safe_delay(j + 1);
 
+        if (validators[j].skip_percent) {
+          validators[j].skip_percent = validators[j].skip_percent.toFixed(2);
+        }
+
         // set halt warning
         if (validators[j].cumulative_stake_percent > 33 && !halt_warning_set) {
           count_halt = j + 1;
@@ -72,13 +79,22 @@ export default class ValidatorsController extends Controller {
         }
       }
 
-      versions = Object.values(versions);
+      versions = Object.values(versions).sort((a, b) => (a.count < b.count ? 1 : -1));
+      top_two_versions = versions.slice(0, 2);
+      other_versions = versions.slice(2);
+      other_versions_parent = other_versions.filter((o) => o.version === 'other')[0];
+
+      for (let i = 0; i < other_versions.length; i++) {
+        if (other_versions[i].version != 'other') {
+          other_versions_parent.count += other_versions[i].count;
+        }
+      }
 
       versions.forEach((v) => {
         v.percent = ((v.count / count) * 100).toFixed(1);
       });
 
-      versions = versions.sort((a, b) => (a.count < b.count ? 1 : -1));
+      versions = versions.filter((v) => v.count >= other_versions_parent.count);
 
       const delay_halt = this.safe_delay(count_halt + 1);
 
