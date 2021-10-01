@@ -112,14 +112,10 @@ export default class ValidatorsController extends Controller {
 
   get yield() {
     if (this.model.inflation && this.model.validators) {
-      // real network apy is a little lower than calculated
-      // due to network imperfections and block time variability
-      // this is a manual adjustment to make APY more realistic
-      const variability = 0.02;
       const inflation = this.model.inflation.total;
       const total_supply = this.model.supply.total;
       const activated_stake = this.model.supply.activating + this.model.supply.effective;
-      const apy = (inflation * total_supply) / activated_stake - variability;
+      const apy = (inflation * total_supply) / activated_stake;
       const apy_adjusted = apy - inflation;
 
       return {
