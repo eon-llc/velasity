@@ -9,7 +9,7 @@
 				</YieldOnLoad>
 			</div>
 			<div class="section apy" style={{delay 2}}>
-				<h6>Staking APY</h6>
+				<h6>Staking APR</h6>
 				<YieldOnLoad @loaded={{this.yield}}>
 					<h2>{{this.yield.apy}}%</h2>
 					Adj: {{this.yield.apy_adjusted}}%
@@ -85,9 +85,9 @@
 							</div>
 							<div class="commission">{{v.commission}}%</div>
 							<div class="skip">
-								{{#if v.skip_percent}}
+								{{#unless (eq v.skip_percent null)}}
 									{{v.skip_percent}}%
-								{{/if}}
+								{{/unless}}
 							</div>
 							<div class="vote">{{v.last_vote}}</div>
 						</LinkTo>
