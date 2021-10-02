@@ -1,4 +1,4 @@
-<div id="validator-id">{{log this.model}}
+<div id="validator-id">
 	<div class="container">
 		<div class="box">
 			{{#let (shorten this.model.validator.vote_pubkey) as |short_key|}}
@@ -25,6 +25,7 @@
 					{{/if}}
 				</li>
 				<li>Commission: <span class="value">{{this.model.validator.commission}}%</span></li>
+				<li>Stake: <span class="value">{{from_lamport this.model.validator.activated_stake}} VLX</span></li>
 				<li>Overall Rating:&nbsp;<StarRating @score={{this.validator_score.total}} /></li>
 			</ul>
 		</div>
@@ -39,7 +40,7 @@
 					<StarRating @score={{this.validator_score.vote}} />
 				</div>
 				<div class="chart-wrap">
-					<C3Chart @data={{this.validator_performance.vote}} @axis={{this.axis}} @legend={{this.legend}} @size={{this.size}} @point={{this.point}} @color={{this.color}} @grid={{this.grid}} @tooltip={{this.tooltip}}/>
+					<C3Chart @data={{this.validator_performance.vote}} @axis={{this.axis}} @legend={{this.legend}} @size={{this.size}} @point={{this.point}} @color={{this.color}} @grid={{this.performance_grid}} @tooltip={{this.tooltip}}/>
 				</div>
 			</div>
 			<div class="section root">
@@ -48,7 +49,7 @@
 					<StarRating @score={{this.validator_score.root}} />
 				</div>
 				<div class="chart-wrap">
-					<C3Chart @data={{this.validator_performance.root}} @axis={{this.axis}} @legend={{this.legend}} @size={{this.size}} @point={{this.point}} @color={{this.color}} @grid={{this.grid}} @tooltip={{this.tooltip}}/>
+					<C3Chart @data={{this.validator_performance.root}} @axis={{this.axis}} @legend={{this.legend}} @size={{this.size}} @point={{this.point}} @color={{this.color}} @grid={{this.performance_grid}} @tooltip={{this.tooltip}}/>
 				</div>
 			</div>
 			<div class="section skip">
@@ -57,7 +58,29 @@
 					<StarRating @score={{this.validator_score.skip}} />
 				</div>
 				<div class="chart-wrap">
-					<C3Chart @data={{this.validator_performance.skip}} @axis={{this.axis}} @legend={{this.legend}} @size={{this.size}} @point={{this.point}} @color={{this.color}} @grid={{this.grid}} @tooltip={{this.tooltip}}/>
+					<C3Chart @data={{this.validator_performance.skip}} @axis={{this.axis}} @legend={{this.legend}} @size={{this.size}} @point={{this.point}} @color={{this.color}} @grid={{this.performance_grid}} @tooltip={{this.tooltip}}/>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div id="validator-stats">
+	<div class="container">
+		<div class="box">
+			<div class="section stakers">
+				<div class="score-wrap">
+					<h6>Stake<Tooltip @text="Total stake over the last 90 days"/></h6>
+				</div>
+				<div class="chart-wrap">
+					<C3Chart @data={{this.validator_stats.stake}} @axis={{this.axis}} @legend={{this.legend}} @size={{this.size}} @point={{this.point}} @color={{this.green_color}} @grid={{this.stats_grid}} @tooltip={{this.tooltip}}/>
+				</div>
+			</div>
+			<div class="section stake">
+				<div class="score-wrap">
+					<h6>Stakers<Tooltip @text="Number of stakers over the last 90 days"/></h6>
+				</div>
+				<div class="chart-wrap">
+					<C3Chart @data={{this.validator_stats.stakers}} @axis={{this.axis}} @legend={{this.legend}} @size={{this.size}} @point={{this.point}} @color={{this.green_color}} @grid={{this.stats_grid}} @tooltip={{this.tooltip}}/>
 				</div>
 			</div>
 		</div>

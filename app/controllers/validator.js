@@ -7,6 +7,7 @@ export default class ValidatorsController extends Controller {
 
   point = { show: false };
   color = { pattern: ['#6b6d82', '#606dff'] };
+  green_color = { pattern: ['#63b941'] };
   axis = {
     x: { show: false, tick: { format: '%Y-%m-%d %H:%M:%S %Z' }, type: 'timeseries' },
     y: { show: false },
@@ -30,9 +31,14 @@ export default class ValidatorsController extends Controller {
           text += `<span class='label'>${data[i].x}</span>`;
         }
 
-        value = valueFormat(data[i].value, data[i].ratio, data[i].id, data[i].index);
+        if (data[i].value > 1000000) {
+          value = (data[i].value / 1000000000).toLocaleString() + ' VLX';
+        } else {
+          value = valueFormat(data[i].value, data[i].ratio, data[i].id, data[i].index).toFixed(3);
+        }
+
         text += `<span class='title' style="color: ${config.data_colors[data[i].id]}">${data[i].id}</span>`;
-        text += `<span class='value'>${value.toFixed(3)}</span>`;
+        text += `<span class='value'>${value}</span>`;
       }
 
       text += `</div>`;
@@ -57,9 +63,28 @@ export default class ValidatorsController extends Controller {
     },
   };
 
-  get grid() {
+  get performance_grid() {
     if (this.model.performance) {
       const lines = this.model.performance.map((p) => {
+        return { value: new Date(p.timestamp) };
+      });
+
+      return {
+        lines: {
+          front: false,
+        },
+        x: {
+          lines: lines,
+        },
+      };
+    } else {
+      return [];
+    }
+  }
+
+  get stats_grid() {
+    if (this.model.digested) {
+      const lines = this.model.digested.map((p) => {
         return { value: new Date(p.timestamp) };
       });
 
@@ -91,80 +116,6 @@ export default class ValidatorsController extends Controller {
       stakers = stakers.sort((a, b) => (parseInt(a.active_stake) < parseInt(b.active_stake) ? 1 : -1));
 
       return stakers;
-    } else {
-      return false;
-    }
-  }
-
-  get validator() {
-    if (this.model.validator) {
-      const count = this.model.validators.length;
-      const validator_scores = this.validator_scores();
-      let validators = this.model.validators;
-      let halt_warning_set = false;
-      let count_halt;
-      let versions = [];
-
-      for (var i = validators.length - 1; i >= 0; i--) {
-        validators[i].activated_stake = Math.round(validators[i].activated_stake / 1000000000);
-      }
-
-      validators = validators.sort((a, b) => (a.activated_stake < b.activated_stake ? 1 : -1));
-
-      const cumulative_sum = ((sum) => (value) => (sum += value))(0);
-      const cumulative_stake = validators.map((e) => e.activated_stake).map(cumulative_sum);
-      const total_stake = validators.map((e) => e.activated_stake).reduce((acc, curr) => acc + curr);
-
-      for (var j = 0; j < validators.length; j++) {
-        // assign calculated properties
-        validators[j].score = validator_scores[validators[j].vote_pubkey];
-        validators[j].activated_stake_percent = Math.round((validators[j].activated_stake / total_stake) * 100);
-        validators[j].cumulative_stake = cumulative_stake[j];
-        validators[j].cumulative_stake_percent = Math.round((cumulative_stake[j] / total_stake) * 100);
-        validators[j].activated_stake = validators[j].activated_stake.toLocaleString();
-        validators[j].last_vote = validators[j].last_vote.toLocaleString();
-        validators[j].cumulative_width = this.safe_width(validators[j].cumulative_stake_percent);
-        validators[j].own_width_w_offset = this.safe_width_w_offset(
-          validators[j].activated_stake_percent,
-          Math.abs(validators[j].activated_stake_percent - validators[j].cumulative_stake_percent)
-        );
-        validators[j].halt_warning = false;
-        validators[j].style = halt_warning_set ? this.safe_delay(j + 2) : this.safe_delay(j + 1);
-
-        // set halt warning
-        if (cumulative_stake[j] > 33 && !halt_warning_set) {
-          count_halt = j + 1;
-          validators[j].halt_warning = true;
-          halt_warning_set = true;
-        }
-
-        const version = validators[j].version ? validators[j].version : 'other';
-
-        // calculate node version stats
-        if (version in versions) {
-          versions[version].count++;
-        } else {
-          versions[version] = { version: version, count: 1 };
-        }
-      }
-
-      versions = Object.values(versions);
-
-      versions.forEach((v) => {
-        v.percent = ((v.count / count) * 100).toFixed(1);
-      });
-
-      versions = versions.sort((a, b) => (a.count < b.count ? 1 : -1));
-
-      const delay_halt = this.safe_delay(count_halt + 1);
-
-      return {
-        count: count,
-        count_halt: count_halt,
-        delay_halt: delay_halt,
-        list: validators,
-        versions: versions,
-      };
     } else {
       return false;
     }
@@ -243,6 +194,33 @@ export default class ValidatorsController extends Controller {
           x: 'x',
           xFormat: '%Y-%m-%d %H:%M:%S %Z',
           columns: [x, cluster_skip, validator_skip],
+          type: 'spline',
+        },
+      };
+    } else {
+      return false;
+    }
+  }
+
+  get validator_stats() {
+    if (this.model.digested) {
+      const stake = ['Total Stake', ...this.model.digested.map((e) => e.stake)];
+      const stakers = ['Number of Stakers', ...this.model.digested.map((e) => e.stakers)];
+
+      const x = ['x', ...this.model.digested.map((p) => new Date(p.timestamp))];
+
+      return {
+        xFormat: '%Y-%m-%d %H:%M:%S %Z',
+        stake: {
+          x: 'x',
+          xFormat: '%Y-%m-%d %H:%M:%S %Z',
+          columns: [x, stake],
+          type: 'spline',
+        },
+        stakers: {
+          x: 'x',
+          xFormat: '%Y-%m-%d %H:%M:%S %Z',
+          columns: [x, stakers],
           type: 'spline',
         },
       };
