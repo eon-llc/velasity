@@ -92,25 +92,22 @@
 			<ul>
 				<li class="heading">
 					<div class="account">Stake Account</div>
-					<div class="epoch">
-						<span class="d-block d-md-none">Epoch</span>
-						<span class="d-none d-md-block">Activation Epoch</span>
-					</div>
+					<span class="d-none d-md-block">Activation Epoch</span>
 					<div class="amount">Amount</div>
-					<div class="share">Share</div>
+					<div class="share d-none d-md-block">Share</div>
 				</li>
 				{{#each this.stakers as |s|}}
 					<li>
 						<div class="account">
 							<CopyButton @short={{true}} @route="address" @hash={{s.staker}}/>
 						</div>
-						<div class="epoch">
+						<div class="epoch d-none d-md-block">
 							{{s.activation_epoch}}
 						</div>
 						<div class="amount">
 							{{from_lamport s.active_stake}} VLX
 						</div>
-						<div class="share">
+						<div class="share d-none d-md-block">
 							{{s.share}}%
 						</div>
 					</li>

@@ -547,7 +547,7 @@ header
 					.title
 						font-size: 0.8rem
 						color: var(--text_dark)
-#validator-stats
+#validator-top-stats
 	border-top: 1px solid var(--border_color)
 	transition: all 0.3s
 	display: flex
@@ -1177,6 +1177,9 @@ footer
 			flex-direction: column
 			.section:not(:last-of-type)
 				margin: 0 0 1rem 0
+	#validator-stakers
+		.box ul li > div.account, .box ul li > div.amount
+			flex: 1
 	footer
 		.toggleWrapper
 			display: block
