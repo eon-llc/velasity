@@ -80,7 +80,7 @@ export default class IndexController extends Controller {
 
   get circulating_percent() {
     if (this.circulating_supply) {
-      return (this.circulating_supply / this.total_supply) * 100;
+      return ((this.circulating_supply / this.total_supply) * 100).toFixed(2);
     } else {
       return false;
     }
