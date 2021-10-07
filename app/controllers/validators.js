@@ -80,21 +80,19 @@ export default class ValidatorsController extends Controller {
       }
 
       versions = Object.values(versions).sort((a, b) => (a.count < b.count ? 1 : -1));
-      top_two_versions = versions.slice(0, 2);
-      other_versions = versions.slice(2);
-      other_versions_parent = other_versions.filter((o) => o.version === 'other')[0];
+      other_versions_parent = versions.filter((o) => o.version === 'other')[0];
+      top_two_versions = versions.filter((o) => o.version !== 'other').slice(0, 2);
+      other_versions = versions.filter((o) => o.version !== 'other').slice(2);
 
       for (let i = 0; i < other_versions.length; i++) {
-        if (other_versions[i].version != 'other') {
-          other_versions_parent.count += other_versions[i].count;
-        }
+        other_versions_parent.count += other_versions[i].count;
       }
+
+      versions = top_two_versions.concat(other_versions_parent);
 
       versions.forEach((v) => {
         v.percent = ((v.count / count) * 100).toFixed(1);
       });
-
-      versions = versions.filter((v) => v.count >= other_versions_parent.count);
 
       const delay_halt = this.safe_delay(count_halt + 1);
 
