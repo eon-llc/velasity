@@ -20,10 +20,8 @@ export default class ValidatorRoute extends Route {
           this.notify.info('Failed to find validator.');
           this.router.transitionTo('index');
         }
-        const result = response.data.firstObject;
-        result.validator = result.validator.firstObject;
 
-        return result;
+        return response.data;
       })
       .catch(() => {
         return false;
