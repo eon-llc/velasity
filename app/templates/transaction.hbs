@@ -61,7 +61,7 @@
 													<span class="badge">Fee Payer</span>
 												{{/if}}
 												{{#each instructions as |inst|}}
-													{{#if (eq key.pubkey inst.programId)}}
+													{{#if (eq key.index inst.programIdIndex)}}
 														<span class="badge">Program</span>
 													{{/if}}
 												{{/each}}
