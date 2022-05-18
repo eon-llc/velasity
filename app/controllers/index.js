@@ -1,13 +1,38 @@
 import Controller from '@ember/controller';
 import { htmlSafe } from '@ember/template';
+import { tracked } from '@glimmer/tracking';
 
 const precision = 1000000000;
 const billion = 1000000000;
 const million = 1000000;
 
 export default class IndexController extends Controller {
+  @tracked seconds_remaining = false;
+  @tracked countdown = false;
+
+  init() {
+    super.init(...arguments);
+
+    setInterval(() => {
+      if(this.seconds_remaining){
+        this.seconds_remaining = this.seconds_remaining - 1;
+      } else {
+        this.seconds_remaining = this.epoch_seconds_remaining();
+      }
+
+      this.countdown = this.to_time(this.seconds_remaining);
+    }, 1000);
+  }
+
   safe_width(width) {
     return htmlSafe(`width: ${width}%`);
+  }
+
+  to_time(seconds) {
+    const h = `${Math.floor(seconds / 3600)}`.padStart(2, '0');
+    const m = `${Math.floor(seconds % 3600 / 60)}`.padStart(2, '0');
+    const s = `${Math.floor(seconds % 3600 % 60)}`.padStart(2, '0');
+    return `${h}:${m}:${s}`; 
   }
 
   get tps_range() {
@@ -80,7 +105,7 @@ export default class IndexController extends Controller {
 
   get circulating_percent() {
     if (this.circulating_supply) {
-      return ((this.circulating_supply / this.total_supply) * 100).toFixed(2);
+      return ((this.circulating_supply / this.total_supply) * 100).toFixed(0);
     } else {
       return false;
     }
@@ -89,7 +114,7 @@ export default class IndexController extends Controller {
   get staked_percent() {
     if (this.model.epoch) {
       const active_stake = this.model.validators.map((v) => Math.round(v.activated_stake / precision)).reduce((acc, curr) => acc + curr);
-      return ((active_stake / this.model.supply?.total) * 100).toFixed(2);
+      return ((active_stake / this.model.supply?.total) * 100).toFixed(1);
     } else {
       return false;
     }
@@ -160,6 +185,14 @@ export default class IndexController extends Controller {
   get epoch_progress() {
     if (this.model.epoch) {
       return this.safe_width(Math.round((this.model.epoch.slotIndex / this.model.epoch.slotsInEpoch) * 100));
+    } else {
+      return false;
+    }
+  }
+
+  epoch_seconds_remaining() {
+    if (this.model?.epoch) {
+      return Math.round((this.model.epoch.slotsInEpoch - this.model.epoch.slotIndex) * this.slot_time);
     } else {
       return false;
     }

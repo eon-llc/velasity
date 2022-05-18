@@ -26,14 +26,10 @@
 			</div>
 			<div class="section epoch" style={{delay 4}}>
 				<div class="heading">
-					<h6>Epoch</h6>
-					{{#if this.epoch_number }}
-						<span class="badge">
-							<span class="current">{{this.epoch_number}}</span>
-							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M6.7 2.8L11.9 8l-5.2 5.2 2.1 2L16 8 8.8.8z"/><path d="M2.1 15.2L9.3 8 2.1.8 0 2.8 5.2 8 0 13.2z"/></svg>
-							<span class="next">{{sum this.epoch_number 1}}</span>
-						</span>
-					{{/if}}
+					<h6>Epoch <span class="d-none d-md-inline">#</span><em>{{if this.epoch_number this.epoch_number '0'}}</em></h6>
+					<span class="badge">
+						<span class="current">{{if this.seconds_remaining this.countdown '0'}}</span>
+					</span>
 				</div>
 				<YieldOnLoad @loaded={{this.epoch_progress}}>
 					<div class="bar outer">
