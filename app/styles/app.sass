@@ -320,6 +320,9 @@ header
 	h6
 		color: var(--text_dark)
 		margin: 0 0 0.25rem 0
+		em
+			font-style: normal
+			color: var(--text_medium)
 	h2
 		color: var(--purple)
 		margin: 0
@@ -823,9 +826,13 @@ header
 		color: var(--purple)
 		margin: 0
 	.box
-		flex-direction: column
+		flex-direction: row
 		background: var(--pixel_img)
 		background-size: 4px 4px
+		justify-content: flex-start
+		align-items: center
+		span
+			margin: 0 0 0 1rem
 #validator-overview
 	border-top: 1px solid var(--border_color)
 	transition: all 0.3s
@@ -1184,6 +1191,12 @@ footer
 							display: none
 					.validator
 						width: 45%
+	#validator-id
+		.box
+			flex-direction: column
+			align-items: flex-start
+			span
+				margin: 1rem 0 0 0
 	#validator-ratings, #validator-stats
 		.box
 			flex-direction: column

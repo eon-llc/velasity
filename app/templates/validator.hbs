@@ -2,7 +2,7 @@
 	<div class="container">
 		<div class="box">
 			{{#let (shorten this.model.validator.vote_pubkey) as |short_key|}}
-				<h2>{{or this.model.validator.name short_key}}</h2>
+				<h2>{{or this.model.validator.name short_key}}</h2>{{#if this.model.validator.delinquent}}<span class="badge error"><BsTooltip @title="Validator is not operational" />Delinquent</span>{{/if}}
 			{{/let}}
 		</div>
 	</div>
