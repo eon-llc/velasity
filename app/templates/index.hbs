@@ -105,7 +105,7 @@
 					<h6>Current TPS</h6>
 					<YieldOnLoad @loaded={{this.current_tps}}>
 						<h2>{{this.current_tps.tps}}</h2>
-						slot #{{this.current_tps.slot}}
+						slot {{this.current_tps.slot}}
 					</YieldOnLoad>
 				</div>
 				<div class="section txs" style={{delay 1}}>
@@ -115,7 +115,7 @@
 					</div>
 					<YieldOnLoad @loaded={{this.current_num_txs}}>
 						<h2>{{this.current_num_txs.num}}</h2>
-						slot #{{this.current_num_txs.slot}}
+						slot {{this.current_num_txs.slot}}
 					</YieldOnLoad>
 				</div>
 			</div>
