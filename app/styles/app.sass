@@ -57,6 +57,7 @@ body.light
 	z-index: 1000
 	box-shadow: 0 0 1rem 0 rgb(0 0 0 / 20%)
 	pointer-events: none
+	animation: slide-fade-in-from-top 0.3s ease-in forwards
 	&.done
 		animation: slide-fade-out-from-bottom 0.3s ease-in forwards
 
@@ -1090,6 +1091,14 @@ footer
 	100%
 		opacity: 1
 		transform: translateX(0)
+
+@keyframes slide-fade-in-from-top
+	0%
+		opacity: 0
+		margin: -1rem 0 0 0
+	100%
+		opacity: 1
+		margin: 0
 
 @keyframes slide-fade-out-from-bottom
 	0%

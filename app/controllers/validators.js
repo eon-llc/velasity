@@ -1,10 +1,12 @@
 import Controller from '@ember/controller';
 import { htmlSafe } from '@ember/template';
 import ENV from 'velasity/config/environment';
+import { StarFourPoints } from 'ember-mdi';
 
 export default class ValidatorsController extends Controller {
   api_url = ENV.APP.api_url;
   vote_key = ENV.APP.vote_key;
+  StarFourPoints = StarFourPoints;
 
   safe_width(width) {
     return htmlSafe(`width: ${width}%`);

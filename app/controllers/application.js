@@ -2,10 +2,12 @@ import Controller from '@ember/controller';
 import ENV from 'velasity/config/environment';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
+import { Twitter } from 'ember-mdi';
 
 export default class ApplicationController extends Controller {
   @tracked theme;
   vote_key = ENV.APP.vote_key;
+  Twitter = Twitter;
 
   constructor() {
     super(...arguments);

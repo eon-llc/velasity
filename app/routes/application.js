@@ -5,16 +5,13 @@ import { inject as service } from '@ember/service';
 
 export default class ApplicationRoute extends Route {
   @service notify;
-  @service pageProgress;
 
   @action
   async loading(transition) {
     if (!transition.from || transition.from.name !== transition.to.name) {
-      const pageProgress = this.pageProgress;
-      pageProgress.start(transition.targetName);
+      document.querySelector('#loading').classList.remove('done');
       transition.promise.finally(() => {
         document.querySelector('#loading').classList.add('done');
-        pageProgress.done();
       });
     } else {
       transition.promise.finally(() => {});
